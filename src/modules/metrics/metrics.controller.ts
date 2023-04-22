@@ -33,15 +33,7 @@ export class MetricsController {
   ) {
     const [_, serial] = context.getTopic().split('/');
 
-    let meter: MeterEntity;
-    try {
-      meter = await this.metersService.findBySerial(serial);
-    } catch (err) {
-      return Logger.error(
-        `Счетчик с серийным номером: ${serial} не найден`,
-        'MQTT',
-      );
-    }
+    const meter = await this.metersService.upsert({ serial });
 
     await this.metricsService.create({ meter, value });
     Logger.log(`${serial}: ${value}`, 'MQTT');
