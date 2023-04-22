@@ -1,4 +1,4 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -45,7 +45,9 @@ async function bootstrap() {
   initializeSwaggerDocumentation(app);
 
   await app.startAllMicroservices();
-  await app.listen(3000);
+  await app.listen(3000, '0.0.0.0');
+
+  Logger.log(`${await app.getUrl()}/docs`, 'Documentation');
 }
 
 bootstrap();
