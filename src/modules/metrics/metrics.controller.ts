@@ -1,23 +1,20 @@
-import { Controller, Get, Logger, ParseIntPipe } from '@nestjs/common';
 import {
-  Ctx,
-  MessagePattern,
-  MqttContext,
-  Payload,
-} from '@nestjs/microservices';
+  Controller,
+  Get,
+  Logger,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { EventPattern, Payload } from '@nestjs/microservices';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { MeterEntity } from '../meters/entities/meter.entity';
-import { MetersService } from '../meters/meters.service';
+import { CreateMetricDto } from './dto/create-metric.dto';
 import { MetricEntity } from './entities/metric.entity';
 import { MetricsService } from './metrics.service';
 
 @ApiTags('Метрики')
 @Controller('metrics')
 export class MetricsController {
-  public constructor(
-    private readonly metricsService: MetricsService,
-    private readonly metersService: MetersService,
-  ) {}
+  public constructor(private readonly metricsService: MetricsService) {}
 
   @ApiOperation({ summary: 'Получить все метрики' })
   @ApiOkResponse({ type: MetricEntity, isArray: true })
@@ -26,16 +23,11 @@ export class MetricsController {
     return this.metricsService.findAll();
   }
 
-  @MessagePattern('meters/+')
-  public async createMetric(
-    @Payload('value', new ParseIntPipe()) value: number,
-    @Ctx() context: MqttContext,
-  ) {
-    const [_, serial] = context.getTopic().split('/');
+  @UsePipes(new ValidationPipe())
+  @EventPattern('postMetric')
+  public async createMetric(@Payload() dto: CreateMetricDto) {
+    await this.metricsService.create(dto);
 
-    const meter = await this.metersService.upsert({ serial });
-
-    await this.metricsService.create({ meter, value });
-    Logger.log(`${serial}: ${value}`, 'MQTT');
+    Logger.log(`${dto.serial}: ${dto.value}`, 'postMetric');
   }
 }

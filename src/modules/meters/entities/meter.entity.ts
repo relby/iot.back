@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ApiPropertySerial } from 'src/decorators/swagger';
+import { ApiPropertySerial } from 'src/decorators';
 import { MetricEntity } from 'src/modules/metrics/entities/metric.entity';
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 

@@ -32,9 +32,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.MQTT,
+    transport: Transport.TCP,
     options: {
-      url: 'mqtt://0.0.0.0:1883',
+      host: '0.0.0.0',
+      port: 5000,
     },
   });
 

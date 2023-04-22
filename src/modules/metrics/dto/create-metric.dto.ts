@@ -1,13 +1,10 @@
-import { Type } from 'class-transformer';
-import { IsString, ValidateNested } from 'class-validator';
-import { MeterEntity } from 'src/modules/meters/entities/meter.entity';
+import { IsNumber } from 'class-validator';
+import { IsSerial } from 'src/decorators';
 
 export class CreateMetricDto {
-  @IsString()
-  public readonly value: number;
+  @IsSerial()
+  public readonly serial: string;
 
-  @IsString()
-  @ValidateNested()
-  @Type(() => MeterEntity)
-  public readonly meter: MeterEntity;
+  @IsNumber()
+  public readonly value: number;
 }

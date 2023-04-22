@@ -222,6 +222,10 @@
         "required": [
           "serial"
         ]
+      },
+      "CreateMetricDto": {
+        "type": "object",
+        "properties": {}
       }
     }
   }

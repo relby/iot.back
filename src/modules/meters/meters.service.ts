@@ -33,6 +33,6 @@ export class MetersService {
   }
 
   public async payBySerial(serial: string) {
-    // TODO: Unimplemented
+    throw new HttpException('unimplemented', HttpStatus.I_AM_A_TEAPOT);
   }
 }
