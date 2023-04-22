@@ -5,10 +5,13 @@ import {
   MqttContext,
   Payload,
 } from '@nestjs/microservices';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { MeterEntity } from '../meters/entities/meter.entity';
 import { MetersService } from '../meters/meters.service';
+import { MetricEntity } from './entities/metric.entity';
 import { MetricsService } from './metrics.service';
 
+@ApiTags('Метрики')
 @Controller('metrics')
 export class MetricsController {
   public constructor(
@@ -16,6 +19,8 @@ export class MetricsController {
     private readonly metersService: MetersService,
   ) {}
 
+  @ApiOperation({ summary: 'Получить все метрики' })
+  @ApiOkResponse({ type: MetricEntity, isArray: true })
   @Get()
   public async getAll() {
     return this.metricsService.findAll();

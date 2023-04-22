@@ -1,0 +1,228 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/meters": {
+      "get": {
+        "operationId": "MetersController_getAll",
+        "summary": "Получить все счетчики",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MeterEntity"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Счетчики"
+        ]
+      },
+      "put": {
+        "operationId": "MetersController_upsert",
+        "summary": "Создать или обновить счетчик",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMeterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeterEntity"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Счетчики"
+        ]
+      }
+    },
+    "/api/meters/{serial}": {
+      "get": {
+        "operationId": "MetersController_getBySerial",
+        "summary": "Получить счетчик по серийному номеру",
+        "parameters": [
+          {
+            "name": "serial",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MeterEntity"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Счетчик не найден"
+          }
+        },
+        "tags": [
+          "Счетчики"
+        ]
+      },
+      "patch": {
+        "operationId": "MetersController_payBySerial",
+        "summary": "Оплатить счетчик по серийному номеру",
+        "parameters": [
+          {
+            "name": "serial",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Счетчик не найден"
+          }
+        },
+        "tags": [
+          "Счетчики"
+        ]
+      }
+    },
+    "/api/metrics": {
+      "get": {
+        "operationId": "MetricsController_getAll",
+        "summary": "Получить все метрики",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MetricEntity"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Метрики"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "iot.back",
+    "description": "IoT project documentation",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "MetricEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "value": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "value"
+        ]
+      },
+      "MeterEntity": {
+        "type": "object",
+        "properties": {
+          "serial": {
+            "type": "string",
+            "example": "00000001",
+            "minLength": 8,
+            "maxLength": 8
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastTimePaid": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "metrics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MetricEntity"
+            }
+          }
+        },
+        "required": [
+          "serial",
+          "description",
+          "lastTimePaid",
+          "metrics"
+        ]
+      },
+      "CreateMeterDto": {
+        "type": "object",
+        "properties": {
+          "serial": {
+            "type": "string",
+            "example": "00000001",
+            "minLength": 8,
+            "maxLength": 8
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "serial"
+        ]
+      }
+    }
+  }
+}
