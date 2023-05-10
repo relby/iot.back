@@ -5,6 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { ConfigService } from '@nestjs/config';
 
 const PUBLIC_PATH = './public';
 
@@ -31,11 +32,13 @@ function initializeSwaggerDocumentation(app: INestApplication) {
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const configService = app.get<ConfigService>(ConfigService);
+
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.TCP,
     options: {
-      host: '0.0.0.0',
-      port: 5000,
+      host: configService.get<string>('TCP_HOST', '0.0.0.0'),
+      port: configService.get<number>('TCP_PORT', 5000),
     },
   });
 
@@ -46,7 +49,10 @@ async function bootstrap() {
   initializeSwaggerDocumentation(app);
 
   await app.startAllMicroservices();
-  await app.listen(3000, '0.0.0.0');
+  await app.listen(
+    configService.get<number>('PORT', 3000),
+    configService.get<string>('HOST', '0.0.0.0'),
+  );
 
   Logger.log(`${await app.getUrl()}/docs`, 'Documentation');
 }

@@ -1,0 +1,47 @@
+version: '3.3'
+
+services:
+  postgres:
+    image: postgres
+    container_name: iot-postgres
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-iot}
+    ports:
+      - ${DB_PORT:-5432}:${DB_PORT:-5432}
+
+  nodered:
+    image: nodered/node-red
+    container_name: iot-nodered
+    environment:
+      TCP_HOST: app
+      TCP_PORT: ${TCP_PORT:-5000}
+    volumes:
+      - ./.nodered:/data
+    depends_on:
+      - app
+    links:
+      - app
+    ports:
+      - ${NODERED_PORT:-1880}:${NODERED_PORT:-1880}
+
+  app:
+    build: .
+    container_name: iot-app
+    environment:
+      DB_HOST: postgres
+      DB_PORT: ${DB_PORT:-5432}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      DB_USERNAME: ${POSTGRES_USER:-postgres}
+      DB_DATABASE: ${POSTGRES_DB:-iot}
+
+      TCP_HOST: app
+      TCP_PORT: ${TCP_PORT:-5000}
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    ports:
+      - ${PORT:-3000}:${PORT:-3000}
+

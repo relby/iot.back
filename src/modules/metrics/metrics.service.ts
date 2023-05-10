@@ -19,7 +19,7 @@ export class MetricsService {
   }
 
   public async create({ serial, value }: CreateMetricDto) {
-    const meter = await this.metersService.findBySerial(serial);
+    const meter = await this.metersService.upsert({ serial });
     return this.metricsRepository.save({ meter, value });
   }
 }

@@ -1,0 +1,244 @@
+[
+    {
+        "id": "f6f2187d.f17ca8",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "8f34db4107132023",
+        "type": "subflow",
+        "name": "Generate metric value",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 120,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "32391bb0cde072cc"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 500,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "32391bb0cde072cc",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "33f5ec17bdcdc646",
+        "type": "mqtt-broker",
+        "name": "iot.back",
+        "broker": "0.0.0.0",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "32391bb0cde072cc",
+        "type": "function",
+        "z": "8f34db4107132023",
+        "name": "Generate payload",
+        "func": "const { serial } = msg;\n\nconst payload = {\n    pattern: \"postMetric\",\n    data: {\n        serial,\n        value: Math.floor(Math.random() * 100)\n    }\n};\n\nconst payloadString = JSON.stringify(payload);\n\nmsg.payload = `${payloadString.length}#${payloadString}`;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 160,
+        "wires": [
+            [
+                "c017e19359a64a0f"
+            ]
+        ]
+    },
+    {
+        "id": "c017e19359a64a0f",
+        "type": "debug",
+        "z": "8f34db4107132023",
+        "name": "Print payload",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 550,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "3cc11d24.ff01a2",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "WARNING: please check you have started this container with a volume that is mounted to /data\\n otherwise any flow changes are lost when you redeploy or upgrade the container\\n (e.g. upgrade to a more recent node-red docker image).\\n  If you are using named volumes you can ignore this warning.\\n Double click or see info side panel to learn how to start Node-RED in Docker to save your work",
+        "info": "\nTo start docker with a bind mount volume (-v option), for example:\n\n```\ndocker run -it -p 1880:1880 -v /home/user/node_red_data:/data --name mynodered nodered/node-red\n```\n\nwhere `/home/user/node_red_data` is a directory on your host machine where you want to store your flows.\n\nIf you do not do this then you can experiment and redploy flows, but if you restart or upgrade the container the flows will be disconnected and lost. \n\nThey will still exist in a hidden data volume, which can be recovered using standard docker techniques, but that is much more complex than just starting with a named volume as described above.",
+        "x": 350,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "2cfa5a9a662befde",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "Meter #12121212",
+        "props": [
+            {
+                "p": "serial",
+                "v": "12121212",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 250,
+        "y": 360,
+        "wires": [
+            [
+                "05bd384d1cb6f7d3"
+            ]
+        ]
+    },
+    {
+        "id": "8bd39a4ef24311dc",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "Meter #34343434",
+        "props": [
+            {
+                "p": "serial",
+                "v": "34343434",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 251,
+        "y": 482,
+        "wires": [
+            [
+                "2aa7f3d60c715ac3"
+            ]
+        ]
+    },
+    {
+        "id": "215d5c4b3cc85217",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "Meter #23232323",
+        "props": [
+            {
+                "p": "serial",
+                "v": "23232323",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 251,
+        "y": 422,
+        "wires": [
+            [
+                "c1fb92a5b19b7efc"
+            ]
+        ]
+    },
+    {
+        "id": "05bd384d1cb6f7d3",
+        "type": "subflow:8f34db4107132023",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "x": 500,
+        "y": 360,
+        "wires": [
+            [
+                "c24370721c706f68"
+            ]
+        ]
+    },
+    {
+        "id": "c1fb92a5b19b7efc",
+        "type": "subflow:8f34db4107132023",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "x": 501,
+        "y": 422,
+        "wires": [
+            [
+                "c24370721c706f68"
+            ]
+        ]
+    },
+    {
+        "id": "2aa7f3d60c715ac3",
+        "type": "subflow:8f34db4107132023",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "x": 501,
+        "y": 482,
+        "wires": [
+            [
+                "c24370721c706f68"
+            ]
+        ]
+    },
+    {
+        "id": "c24370721c706f68",
+        "type": "tcp out",
+        "z": "f6f2187d.f17ca8",
+        "name": "Server",
+        "host": "${TCP_HOST}",
+        "port": "${TCP_PORT}",
+        "beserver": "client",
+        "base64": false,
+        "end": false,
+        "tls": "",
+        "x": 770,
+        "y": 420,
+        "wires": []
+    }
+]
