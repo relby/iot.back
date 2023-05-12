@@ -22,3 +22,8 @@ yarn run migration:run
 ```bash
 yarn run start
 ```
+
+## Or run it with docker compose
+```bash
+docker compose up -d
+```
