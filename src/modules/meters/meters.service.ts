@@ -1,6 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { paginate, PaginateQuery, Paginated } from 'nestjs-paginate';
 import { Repository } from 'typeorm';
+import { MetricEntity } from '../metrics/entities/metric.entity';
+import { MetricsService } from '../metrics/metrics.service';
+import { PaymentEntity } from '../payments/entities/payment.entity';
 import { CreateMeterDto } from './dto/create-meter.dto';
 import { MeterEntity } from './entities/meter.entity';
 
@@ -9,10 +13,18 @@ export class MetersService {
   public constructor(
     @InjectRepository(MeterEntity)
     private readonly metersRepository: Repository<MeterEntity>,
+
+    @InjectRepository(MetricEntity)
+    private readonly metricsRepository: Repository<MetricEntity>,
+
+    @InjectRepository(PaymentEntity)
+    private readonly paymentsRepository: Repository<PaymentEntity>,
   ) {}
 
-  public async findAll(): Promise<MeterEntity[]> {
-    return this.metersRepository.find();
+  public async findAll(query: PaginateQuery): Promise<Paginated<MeterEntity>> {
+    return paginate(query, this.metersRepository, {
+      sortableColumns: ['serial'],
+    });
   }
 
   public async findBySerial(serial: string): Promise<MeterEntity> {
@@ -26,6 +38,26 @@ export class MetersService {
     }
 
     return meter;
+  }
+
+  public async findMetricsBySerial(
+    serial: string,
+    query: PaginateQuery,
+  ): Promise<Paginated<MetricEntity>> {
+    return paginate(query, this.metricsRepository, {
+      sortableColumns: ['id'],
+      where: { meter: { serial } },
+    });
+  }
+
+  public async findPaymentsBySerial(
+    serial: string,
+    query: PaginateQuery,
+  ): Promise<Paginated<PaymentEntity>> {
+    return paginate(query, this.paymentsRepository, {
+      sortableColumns: ['id'],
+      where: { meter: { serial } },
+    });
   }
 
   public async upsert(dto: CreateMeterDto) {

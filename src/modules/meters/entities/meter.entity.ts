@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ApiPropertySerial } from 'src/decorators';
 import { MetricEntity } from 'src/modules/metrics/entities/metric.entity';
+import { PaymentEntity } from 'src/modules/payments/entities/payment.entity';
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
 // TODO: Move documentation to separate dto
@@ -21,6 +22,10 @@ export class MeterEntity {
   })
   @Column({ type: 'timestamp', nullable: true })
   public lastTimePaid: string | null;
+
+  @ApiProperty({ type: () => PaymentEntity, isArray: true })
+  @OneToMany(() => PaymentEntity, (payment) => payment.meter)
+  public payments: PaymentEntity[];
 
   @ApiProperty({ type: () => MetricEntity, isArray: true })
   @OneToMany(() => MetricEntity, (metric) => metric.meter)

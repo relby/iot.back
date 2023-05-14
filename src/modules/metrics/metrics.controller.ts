@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Paginate, PaginateQuery, Paginated } from 'nestjs-paginate';
 import { CreateMetricDto } from './dto/create-metric.dto';
 import { MetricEntity } from './entities/metric.entity';
 import { MetricsService } from './metrics.service';
@@ -17,10 +18,10 @@ export class MetricsController {
   public constructor(private readonly metricsService: MetricsService) {}
 
   @ApiOperation({ summary: 'Получить все метрики' })
-  @ApiOkResponse({ type: MetricEntity, isArray: true })
+  @ApiOkResponse({ type: Paginated<MetricEntity> })
   @Get()
-  public async getAll() {
-    return this.metricsService.findAll();
+  public async getAll(@Paginate() query: PaginateQuery) {
+    return this.metricsService.findAll(query);
   }
 
   @UsePipes(new ValidationPipe())

@@ -12,10 +12,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MeterEntity"
-                  }
+                  "$ref": "#/components/schemas/Paginated"
                 }
               }
             }
@@ -79,10 +76,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MeterEntity"
-                  }
+                  "$ref": "#/components/schemas/MeterEntity"
                 }
               }
             }
@@ -118,6 +112,74 @@
         ]
       }
     },
+    "/api/meters/{serial}/metrics": {
+      "get": {
+        "operationId": "MetersController_getMetricsBySerial",
+        "summary": "Получить метрики по серийному номеру счетчика",
+        "parameters": [
+          {
+            "name": "serial",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Paginated"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Счетчик не найден"
+          }
+        },
+        "tags": [
+          "Счетчики"
+        ]
+      }
+    },
+    "/api/meters/{serial}/payments": {
+      "get": {
+        "operationId": "MetersController_getPaymentsBySerial",
+        "summary": "Получить оплаты по серийному номеру счетчика",
+        "parameters": [
+          {
+            "name": "serial",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Paginated"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Счетчик не найден"
+          }
+        },
+        "tags": [
+          "Счетчики"
+        ]
+      }
+    },
     "/api/metrics": {
       "get": {
         "operationId": "MetricsController_getAll",
@@ -129,10 +191,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MetricEntity"
-                  }
+                  "$ref": "#/components/schemas/Paginated"
                 }
               }
             }
@@ -154,6 +213,30 @@
   "servers": [],
   "components": {
     "schemas": {
+      "Paginated": {
+        "type": "object",
+        "properties": {}
+      },
+      "PaymentEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "sum": {
+            "type": "number"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "sum",
+          "timestamp"
+        ]
+      },
       "MetricEntity": {
         "type": "object",
         "properties": {
@@ -192,6 +275,12 @@
             "format": "date-time",
             "nullable": true
           },
+          "payments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PaymentEntity"
+            }
+          },
           "metrics": {
             "type": "array",
             "items": {
@@ -203,6 +292,7 @@
           "serial",
           "description",
           "lastTimePaid",
+          "payments",
           "metrics"
         ]
       },
