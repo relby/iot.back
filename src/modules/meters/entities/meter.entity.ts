@@ -15,19 +15,9 @@ export class MeterEntity {
   @Column({ type: 'text', nullable: true })
   public description: string | null;
 
-  @ApiProperty({
-    type: 'string',
-    format: 'date-time',
-    nullable: true,
-  })
-  @Column({ type: 'timestamp', nullable: true })
-  public lastTimePaid: string | null;
-
-  @ApiProperty({ type: () => PaymentEntity, isArray: true })
   @OneToMany(() => PaymentEntity, (payment) => payment.meter)
   public payments: PaymentEntity[];
 
-  @ApiProperty({ type: () => MetricEntity, isArray: true })
   @OneToMany(() => MetricEntity, (metric) => metric.meter)
   public metrics: MetricEntity[];
 }

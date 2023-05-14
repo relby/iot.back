@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { paginate, PaginateQuery, Paginated } from 'nestjs-paginate';
 import { Repository } from 'typeorm';
 import { MetricEntity } from '../metrics/entities/metric.entity';
-import { MetricsService } from '../metrics/metrics.service';
 import { PaymentEntity } from '../payments/entities/payment.entity';
+import { PaymentsService } from '../payments/payments.service';
 import { CreateMeterDto } from './dto/create-meter.dto';
 import { MeterEntity } from './entities/meter.entity';
 
@@ -19,6 +19,8 @@ export class MetersService {
 
     @InjectRepository(PaymentEntity)
     private readonly paymentsRepository: Repository<PaymentEntity>,
+
+    private readonly paymentsService: PaymentsService,
   ) {}
 
   public async findAll(query: PaginateQuery): Promise<Paginated<MeterEntity>> {
@@ -60,11 +62,19 @@ export class MetersService {
     });
   }
 
-  public async upsert(dto: CreateMeterDto) {
+  public async upsert(dto: CreateMeterDto): Promise<MeterEntity> {
     return this.metersRepository.save(dto);
   }
 
-  public async payBySerial(serial: string) {
-    throw new HttpException('unimplemented', HttpStatus.I_AM_A_TEAPOT);
+  public async payBySerial(serial: string): Promise<void> {
+    const meter = await this.findBySerial(serial);
+    await this.paymentsService.create(meter);
+  }
+
+  public async pay(): Promise<void> {
+    const meters = await this.metersRepository.find();
+    await Promise.all(
+      meters.map((meter) => this.paymentsService.create(meter)),
+    );
   }
 }

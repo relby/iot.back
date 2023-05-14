@@ -5,14 +5,69 @@
       "get": {
         "operationId": "MetersController_getAll",
         "summary": "Получить все счетчики",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number (starting from 1)",
+            "schema": {}
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number of records per page",
+            "schema": {}
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Multicolumn search term",
+            "schema": {}
+          },
+          {
+            "name": "searchBy",
+            "required": false,
+            "in": "query",
+            "description": "Limit columns to which apply 'search' term",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "description": "Format: _field_:_direction_ [direction may be ASC or DESC] e.g. id:DESC",
+            "schema": {}
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Paginated"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/MeterEntity"
+                          }
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -88,28 +143,6 @@
         "tags": [
           "Счетчики"
         ]
-      },
-      "patch": {
-        "operationId": "MetersController_payBySerial",
-        "summary": "Оплатить счетчик по серийному номеру",
-        "parameters": [
-          {
-            "name": "serial",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "404": {
-            "description": "Счетчик не найден"
-          }
-        },
-        "tags": [
-          "Счетчики"
-        ]
       }
     },
     "/api/meters/{serial}/metrics": {
@@ -124,6 +157,46 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number (starting from 1)",
+            "schema": {}
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number of records per page",
+            "schema": {}
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Multicolumn search term",
+            "schema": {}
+          },
+          {
+            "name": "searchBy",
+            "required": false,
+            "in": "query",
+            "description": "Limit columns to which apply 'search' term",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "description": "Format: _field_:_direction_ [direction may be ASC or DESC] e.g. id:DESC",
+            "schema": {}
           }
         ],
         "responses": {
@@ -132,7 +205,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Paginated"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/MetricEntity"
+                          }
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -158,6 +245,46 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number (starting from 1)",
+            "schema": {}
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number of records per page",
+            "schema": {}
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Multicolumn search term",
+            "schema": {}
+          },
+          {
+            "name": "searchBy",
+            "required": false,
+            "in": "query",
+            "description": "Limit columns to which apply 'search' term",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "description": "Format: _field_:_direction_ [direction may be ASC or DESC] e.g. id:DESC",
+            "schema": {}
           }
         ],
         "responses": {
@@ -166,7 +293,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Paginated"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/PaymentEntity"
+                          }
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -180,18 +321,112 @@
         ]
       }
     },
+    "/api/meters/{serial}/pay": {
+      "post": {
+        "operationId": "MetersController_payBySerial",
+        "summary": "Оплатить счетчик по серийному номеру",
+        "parameters": [
+          {
+            "name": "serial",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Счетчики"
+        ]
+      }
+    },
+    "/api/meters/pay": {
+      "post": {
+        "operationId": "MetersController_pay",
+        "summary": "Оплатить все счетчики",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Счетчики"
+        ]
+      }
+    },
     "/api/metrics": {
       "get": {
         "operationId": "MetricsController_getAll",
         "summary": "Получить все метрики",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number (starting from 1)",
+            "schema": {}
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number of records per page",
+            "schema": {}
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Multicolumn search term",
+            "schema": {}
+          },
+          {
+            "name": "searchBy",
+            "required": false,
+            "in": "query",
+            "description": "Limit columns to which apply 'search' term",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "description": "Format: _field_:_direction_ [direction may be ASC or DESC] e.g. id:DESC",
+            "schema": {}
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Paginated"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/MetricEntity"
+                          }
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -199,6 +434,83 @@
         },
         "tags": [
           "Метрики"
+        ]
+      }
+    },
+    "/api/payments": {
+      "get": {
+        "operationId": "PaymentsController_getAll",
+        "summary": "Получить все оплаты",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number (starting from 1)",
+            "schema": {}
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number of records per page",
+            "schema": {}
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Multicolumn search term",
+            "schema": {}
+          },
+          {
+            "name": "searchBy",
+            "required": false,
+            "in": "query",
+            "description": "Limit columns to which apply 'search' term",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "description": "Format: _field_:_direction_ [direction may be ASC or DESC] e.g. id:DESC",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/PaymentEntity"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Оплаты"
         ]
       }
     }
@@ -213,28 +525,105 @@
   "servers": [],
   "components": {
     "schemas": {
-      "Paginated": {
-        "type": "object",
-        "properties": {}
-      },
-      "PaymentEntity": {
+      "PaginatedResponseMetaDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
-          "sum": {
+          "itemsPerPage": {
             "type": "number"
           },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
+          "totalItems": {
+            "type": "number"
+          },
+          "currentPage": {
+            "type": "number"
+          },
+          "totalPages": {
+            "type": "number"
+          },
+          "sortBy": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "searchBy": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "search": {
+            "type": "string"
+          },
+          "filter": {
+            "type": "object"
           }
         },
         "required": [
-          "id",
-          "sum",
-          "timestamp"
+          "itemsPerPage",
+          "totalItems",
+          "currentPage",
+          "totalPages",
+          "sortBy",
+          "searchBy",
+          "search"
+        ]
+      },
+      "PaginatedResponseLinksDto": {
+        "type": "object",
+        "properties": {
+          "first": {
+            "type": "string"
+          },
+          "previous": {
+            "type": "string"
+          },
+          "current": {
+            "type": "string"
+          },
+          "next": {
+            "type": "string"
+          },
+          "last": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "current"
+        ]
+      },
+      "PaginatedResponseDto": {
+        "type": "object",
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/PaginatedResponseMetaDto"
+          },
+          "links": {
+            "$ref": "#/components/schemas/PaginatedResponseLinksDto"
+          }
+        },
+        "required": [
+          "meta",
+          "links"
+        ]
+      },
+      "MeterEntity": {
+        "type": "object",
+        "properties": {
+          "serial": {
+            "type": "string",
+            "example": "00000001",
+            "minLength": 8,
+            "maxLength": 8
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "serial",
+          "description"
         ]
       },
       "MetricEntity": {
@@ -257,43 +646,20 @@
           "value"
         ]
       },
-      "MeterEntity": {
+      "PaymentEntity": {
         "type": "object",
         "properties": {
-          "serial": {
+          "id": {
+            "type": "string"
+          },
+          "timestamp": {
             "type": "string",
-            "example": "00000001",
-            "minLength": 8,
-            "maxLength": 8
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "lastTimePaid": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "payments": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PaymentEntity"
-            }
-          },
-          "metrics": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MetricEntity"
-            }
+            "format": "date-time"
           }
         },
         "required": [
-          "serial",
-          "description",
-          "lastTimePaid",
-          "payments",
-          "metrics"
+          "id",
+          "timestamp"
         ]
       },
       "CreateMeterDto": {

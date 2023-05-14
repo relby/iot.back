@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { MeterEntity } from 'src/modules/meters/entities/meter.entity';
 import {
-  Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
@@ -13,10 +12,6 @@ export class PaymentEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
   public id: string;
-
-  @ApiProperty()
-  @Column()
-  public sum: number;
 
   @ApiProperty({ format: 'date-time' })
   @CreateDateColumn()
