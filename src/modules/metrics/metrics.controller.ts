@@ -1,16 +1,7 @@
-import {
-  Controller,
-  Get,
-  Logger,
-  UsePipes,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Controller, Logger, UsePipes, ValidationPipe } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Paginate, PaginateQuery } from 'nestjs-paginate';
-import { PaginateQueryOptions } from 'src/decorators/pagination';
+import { ApiTags } from '@nestjs/swagger';
 import { CreateMetricDto } from './dto/create-metric.dto';
-import { MetricEntity } from './entities/metric.entity';
 import { MetricsService } from './metrics.service';
 
 @ApiTags('Метрики')
@@ -18,18 +9,11 @@ import { MetricsService } from './metrics.service';
 export class MetricsController {
   public constructor(private readonly metricsService: MetricsService) {}
 
-  @ApiOperation({ summary: 'Получить все метрики' })
-  @PaginateQueryOptions(MetricEntity)
-  @Get()
-  public async getAll(@Paginate() query: PaginateQuery) {
-    return this.metricsService.findAll(query);
-  }
-
   @UsePipes(new ValidationPipe())
   @EventPattern('postMetric')
   public async createMetric(@Payload() dto: CreateMetricDto) {
     await this.metricsService.create(dto);
 
-    Logger.log(`${dto.serial}: ${dto.value}`, 'postMetric');
+    Logger.log(`${dto.serial}: ${dto.watts}`, 'postMetric');
   }
 }

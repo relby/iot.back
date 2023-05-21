@@ -6,5 +6,5 @@ export class CreateMetricDto {
   public readonly serial: string;
 
   @IsNumber()
-  public readonly value: number;
+  public readonly watts: number;
 }

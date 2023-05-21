@@ -7,13 +7,14 @@ import { PaymentsService } from '../payments/payments.service';
 import { MeterEntity } from './entities/meter.entity';
 import { MetersController } from './meters.controller';
 import { MetersService } from './meters.service';
+import { MeterSubscriber } from './subscribers/meter.subscriber';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([MeterEntity, MetricEntity, PaymentEntity]),
   ],
   controllers: [MetersController],
-  providers: [MetersService, MetricsService, PaymentsService],
+  providers: [MetersService, MetricsService, PaymentsService, MeterSubscriber],
   exports: [MetersService],
 })
 export class MetersModule {}

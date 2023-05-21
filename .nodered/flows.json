@@ -71,7 +71,7 @@
         "type": "function",
         "z": "8f34db4107132023",
         "name": "Generate payload",
-        "func": "const { serial } = msg;\n\nconst prev = context.get('prev') || 0;\n\nconst payload = {\n    pattern: \"postMetric\",\n    data: {\n        serial,\n        value: prev + Math.floor(Math.random() * 10)\n    }\n};\ncontext.set('prev', payload.data.value);\nconst payloadString = JSON.stringify(payload);\n\nmsg.payload = `${payloadString.length}#${payloadString}`;\n\nreturn msg;",
+        "func": "const { serial } = msg;\n\nconst payload = {\n    pattern: \"postMetric\",\n    data: {\n        serial,\n        watts: Math.floor(Math.random() * 10)\n    }\n};\n\nconst payloadString = JSON.stringify(payload);\n\nmsg.payload = `${payloadString.length}#${payloadString}`;\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",

@@ -636,14 +636,14 @@
             "type": "string",
             "format": "date-time"
           },
-          "value": {
+          "watts": {
             "type": "number"
           }
         },
         "required": [
           "id",
           "createdAt",
-          "value"
+          "watts"
         ]
       },
       "PaymentEntity": {

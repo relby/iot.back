@@ -2,11 +2,11 @@ import { ApiProperty } from '@nestjs/swagger';
 import { ApiPropertySerial } from 'src/decorators';
 import { MetricEntity } from 'src/modules/metrics/entities/metric.entity';
 import { PaymentEntity } from 'src/modules/payments/entities/payment.entity';
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
 // TODO: Move documentation to separate dto
 @Entity('meters')
-export class MeterEntity {
+export class MeterEntity extends BaseEntity {
   @ApiPropertySerial()
   @PrimaryColumn({ type: 'character', length: 8 })
   public serial: string;
@@ -20,4 +20,7 @@ export class MeterEntity {
 
   @OneToMany(() => MetricEntity, (metric) => metric.meter)
   public metrics: MetricEntity[];
+
+  public cost: number;
+  public consumption: number;
 }

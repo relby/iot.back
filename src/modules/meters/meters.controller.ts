@@ -6,10 +6,6 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { Paginate, PaginateQuery } from 'nestjs-paginate';
-import { PaginateQueryOptions } from 'src/decorators/pagination';
-import { MetricEntity } from '../metrics/entities/metric.entity';
-import { PaymentEntity } from '../payments/entities/payment.entity';
 import { CreateMeterDto } from './dto/create-meter.dto';
 import { MeterEntity } from './entities/meter.entity';
 import { MetersService } from './meters.service';
@@ -20,10 +16,9 @@ export class MetersController {
   public constructor(private readonly metersService: MetersService) {}
 
   @ApiOperation({ summary: 'Получить все счетчики' })
-  @PaginateQueryOptions(MeterEntity)
   @Get()
-  public async getAll(@Paginate() query: PaginateQuery) {
-    return this.metersService.findAll(query);
+  public async getAll() {
+    return this.metersService.findAll();
   }
 
   @ApiOperation({ summary: 'Получить счетчик по серийному номеру' })
@@ -35,25 +30,17 @@ export class MetersController {
   }
 
   @ApiOperation({ summary: 'Получить метрики по серийному номеру счетчика' })
-  @PaginateQueryOptions(MetricEntity)
   @ApiNotFoundResponse({ description: 'Счетчик не найден' })
   @Get(':serial/metrics')
-  public async getMetricsBySerial(
-    @Param('serial') serial: string,
-    @Paginate() query: PaginateQuery,
-  ) {
-    return this.metersService.findMetricsBySerial(serial, query);
+  public async getMetricsBySerial(@Param('serial') serial: string) {
+    return this.metersService.findMetricsBySerial(serial);
   }
 
   @ApiOperation({ summary: 'Получить оплаты по серийному номеру счетчика' })
-  @PaginateQueryOptions(PaymentEntity)
   @ApiNotFoundResponse({ description: 'Счетчик не найден' })
   @Get(':serial/payments')
-  public async getPaymentsBySerial(
-    @Param('serial') serial: string,
-    @Paginate() query: PaginateQuery,
-  ) {
-    return this.metersService.findPaymentsBySerial(serial, query);
+  public async getPaymentsBySerial(@Param('serial') serial: string) {
+    return this.metersService.findPaymentsBySerial(serial);
   }
 
   @ApiOperation({ summary: 'Создать или обновить счетчик' })
