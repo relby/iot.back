@@ -6,6 +6,8 @@ import { AppModule } from './app.module';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { ConfigService } from '@nestjs/config';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'node:path';
 
 const PUBLIC_PATH = './public';
 
@@ -17,7 +19,7 @@ function initializeSwaggerDocumentation(app: INestApplication) {
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerDocs);
-  SwaggerModule.setup('/docs', app, document);
+  SwaggerModule.setup('/api/docs', app, document);
 
   if (!fs.existsSync(PUBLIC_PATH)) {
     fs.mkdirSync(PUBLIC_PATH);
@@ -30,7 +32,7 @@ function initializeSwaggerDocumentation(app: INestApplication) {
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   const configService = app.get<ConfigService>(ConfigService);
 
@@ -47,6 +49,10 @@ async function bootstrap() {
   app.setGlobalPrefix('/api');
 
   initializeSwaggerDocumentation(app);
+
+  app.useStaticAssets(join(__dirname, '..', 'client'), {
+    prefix: '/',
+  });
 
   await app.startAllMicroservices();
   await app.listen(

@@ -1,0 +1,124 @@
+@import "style.css";
+
+* {
+  color: var(--black);
+  overflow-x: hidden;
+}
+
+td {
+  text-align:center;
+}
+
+label {
+  width:100%;
+}
+
+.table-table {
+  margin: 25px;
+  width: 80%;
+  background: var(--wight);
+  text-align: center;
+  border-radius: 10px;
+  border-collapse: collapse;
+}
+
+.td-table {
+  padding-top: 5px;
+  padding-bottom: 10px;
+  width:20%;
+  white-space: pre-wrap;
+}
+
+.tr-table {
+  background:url(../imgs/login.png) bottom center no-repeat;
+  background-size: 95% 20px;
+}
+
+.circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 25px;
+  background: var(--light-green);
+}
+
+.calendar {
+  float:left;
+  margin: 25px;
+  padding: 30px;
+  width: 80%;
+  border-radius: 16px;
+  background: var(--wight);
+}
+
+.table-calendar {
+  border-collapse: collapse; 
+  width:100%;
+}
+
+.td-calendar {
+  border: solid var(--light-gray) 1px;
+}
+
+.maindate {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 29px;
+}
+
+.btn-lr {
+  background: none;
+  border: none;
+  font: bold;
+  font-size:30px;
+}
+
+.pay {
+  padding: 30px;
+  width: 55%;
+}
+
+.met-read {
+  width:100%;
+  text-align: center;
+  font-size:30px;
+  color: var(--wight);
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.left-text {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 25px;
+  line-height: 45px;
+  color: var(--wight);
+  text-align:left;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.right-text {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 25px;
+  line-height: 45px;
+  color: var(--wight);
+  float: right;
+}
+
+.btn-pay {
+  background: var(--green);
+  border-radius: 10px;
+  border: none;
+  --wight: 90%;
+  width: var(--wight);
+  height: 45px;
+  margin-left: calc(50% - var(--wight)/2);
+
+}
+
+.line {
+  width: 100%;
+  height: 5px;
+  border-bottom: 1px solid var(--wight);
+}

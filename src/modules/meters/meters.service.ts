@@ -54,15 +54,15 @@ export class MetersService {
     return this.metersRepository.save(dto);
   }
 
-  public async payBySerial(serial: string): Promise<void> {
+  public async payBySerial(serial: string): Promise<PaymentEntity> {
     const meter = await this.findBySerial(serial, {
       relations: { metrics: { payment: true } },
     });
-    await this.paymentsService.create(meter);
+    return this.paymentsService.create(meter);
   }
 
-  public async pay(): Promise<void> {
+  public async pay(): Promise<PaymentEntity[]> {
     const meters = await this.findAll();
-    await Promise.all(meters.map(({ serial }) => this.payBySerial(serial)));
+    return Promise.all(meters.map(({ serial }) => this.payBySerial(serial)));
   }
 }

@@ -8,10 +8,12 @@ import { MeterEntity } from './entities/meter.entity';
 import { MetersController } from './meters.controller';
 import { MetersService } from './meters.service';
 import { MeterSubscriber } from './subscribers/meter.subscriber';
+import { SseModule } from '../sse/sse.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([MeterEntity, MetricEntity, PaymentEntity]),
+    SseModule,
   ],
   controllers: [MetersController],
   providers: [MetersService, MetricsService, PaymentsService, MeterSubscriber],

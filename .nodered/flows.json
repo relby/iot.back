@@ -124,7 +124,7 @@
                 "vt": "str"
             }
         ],
-        "repeat": "1",
+        "repeat": "5",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
@@ -149,7 +149,7 @@
                 "vt": "str"
             }
         ],
-        "repeat": "1",
+        "repeat": "9",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
@@ -174,7 +174,7 @@
                 "vt": "str"
             }
         ],
-        "repeat": "1",
+        "repeat": "12",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,

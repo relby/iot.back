@@ -5,6 +5,7 @@ import TypeOrmConfigService from './database/orm.config';
 import { MetersModule } from './modules/meters/meters.module';
 import { MetricsModule } from './modules/metrics/metrics.module';
 import { PaymentsModule } from './modules/payments/payments.module';
+import { SseModule } from './modules/sse/sse.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { PaymentsModule } from './modules/payments/payments.module';
     MetersModule,
     MetricsModule,
     PaymentsModule,
+    SseModule,
   ],
 })
 export class AppModule {}
