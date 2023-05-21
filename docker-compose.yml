@@ -36,6 +36,9 @@ services:
       DB_USERNAME: ${POSTGRES_USER:-postgres}
       DB_DATABASE: ${POSTGRES_DB:-iot}
 
+      HOST: app
+      PORT: ${PORT:-3000}
+
       TCP_HOST: app
       TCP_PORT: ${TCP_PORT:-5000}
     depends_on:

@@ -10,7 +10,7 @@ COPY ./ ./
 
 RUN yarn build
 
-EXPOSE 3000
+EXPOSE ${PORT:-3000}
 
 CMD ["yarn", "start:prod"]
 
