@@ -3,8 +3,8 @@
 ## Prepare containers
 
 ```bash
-docker run -d --network host --name nodered -p 1880:1880 -v node_red_data:/data nodered/node-red
-docker run -d --name postgres -p 5432:5432 -e POSTGRES_USER=iot -e POSTGRES_PASSWORD=iot -e POSTGRES_DB=iot postgres
+docker run -d --network host --name nodered -v ./.nodered:/data nodered/node-red
+docker run -d --name postgres -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=iot postgres
 ```
 
 ## Install dependencies
