@@ -122,3 +122,7 @@ label {
   height: 5px;
   border-bottom: 1px solid var(--wight);
 }
+
+#chart {
+  background: #FFFFFF;
+}

@@ -63,13 +63,13 @@ const drawTableRow = (meter) => {
   if (existingTr) {
     existingTr.children[0].innerHTML = meter.serial;
     existingTr.children[1].innerHTML = meter.description;
-    existingTr.children[2].innerHTML = `${meter.consumption} Вт`;
-    existingTr.children[3].children[0].innerHTML = `${meter.cost} $`;
+    existingTr.children[2].innerHTML = `${meter.consumption} Вт/ч`;
+    existingTr.children[3].children[0].innerHTML = `${meter.cost} ₽`;
   } else {
     const tr = createTableRow([
       meter.serial,
       meter.description,
-      `${meter.consumption} Вт`,
+      `${meter.consumption} Вт/ч`,
     ]);
 
     tr.append(createPayButton(meter));
@@ -79,17 +79,20 @@ const drawTableRow = (meter) => {
 };
 
 const createChart = (meters) => {
+  const colors = ['red', 'green', 'purple', 'blue', 'yellow'];
   return new Chart(document.getElementById('chart'), {
     type: 'line',
     data: {
-      labels: [],
-      datasets: meters.map((meter) => ({
+      datasets: meters.map((meter, i) => ({
         data: [],
         label: meter.serial,
-        // TODO: move to utils function
-        borderColor: '#' + Math.floor(Math.random() * 16777215).toString(16),
+        borderColor: colors[i % colors.length],
         tension: 0.1,
       })),
+    },
+    options: {
+      maintainAspectRatio: false,
+      responsive: false,
     },
   });
 };
@@ -101,21 +104,15 @@ const onEventSourceMessage = async ({ data }) => {
 
   drawTableRow(meter);
 
-  const { labels, datasets } = chart.data;
+  const { datasets } = chart.data;
 
   const dataset = datasets.find((dataset) => dataset.label === meter.serial);
   if (!dataset) return;
 
-  const maxDatasetLength = Math.max(
-    ...datasets.map(({ data: { length } }) => length),
-  );
-
-  if (maxDatasetLength > labels.length) {
-    labels.push(new Date().toLocaleString());
-  }
-
-  dataset.data.push(watts);
-  chart.update();
+  dataset.data.push({
+    x: new Date().toTimeString().split(' ')[0],
+    y: watts,
+  });
 };
 
 let chart;
@@ -135,4 +132,13 @@ window.onload = async () => {
   const eventSource = new EventSource(`./api/sse/meters`);
 
   eventSource.onmessage = onEventSourceMessage;
+
+  setInterval(() => {
+    const { labels, datasets } = chart.data;
+
+    datasets.forEach((dataset) => dataset.data.sort((a, b) => a.x - b.x));
+    labels.sort();
+
+    chart.update();
+  }, 500);
 };
